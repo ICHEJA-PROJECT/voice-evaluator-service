@@ -1,0 +1,42 @@
+openapi: 3.0.0
+info:
+  title: Voice Evaluator API
+  version: 1.0.0
+paths:
+  /evaluate:
+    post:
+      summary: Evalúa un audio contra una frase objetivo
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                audio:
+                  type: string
+                  format: binary
+                  description: Archivo de audio a evaluar (WAV, MP3, etc.)
+                objective_sentence:
+                  type: string
+                  description: Frase objetivo para comparar con la transcripción
+              required:
+                - audio
+                - objective_sentence
+      responses:
+        '200':
+          description: Resultado de la evaluación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  objective_sentence:
+                    type: string
+                  transcription:
+                    type: string
+                  distance:
+                    type: number
+                  precision:
+                    type: number
+                    description: Precisión en porcentaje (0-100) 
