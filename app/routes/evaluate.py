@@ -6,6 +6,7 @@ router = APIRouter()
 
 @router.post(
     "/evaluate",
+    tags=["Evaluación de audio"],
     summary="Evalúa un audio contra una frase objetivo",
     response_description="Resultado de la evaluación",
     response_model=EvaluateResponse,
