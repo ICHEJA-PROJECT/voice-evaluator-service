@@ -20,7 +20,7 @@ async def evaluate_audio(audio: UploadFile, objective_sentence: str):
             if os.path.exists(temp_path):
                 os.remove(temp_path)
         try:
-            dist, precision = calculate_precision(objective_sentence, transcription)
+            dist, precision, wrong_words = calculate_precision(objective_sentence, transcription)
         except Exception as e:
             logger.error(f"Error calculando precisión: {e}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Error al calcular precisión.")
@@ -28,7 +28,8 @@ async def evaluate_audio(audio: UploadFile, objective_sentence: str):
             "objective_sentence": objective_sentence,
             "transcription": transcription,
             "distance": dist,
-            "precision": round(precision * 100, 2)
+            "precision": round(precision * 100, 2),
+            "wrong_words": wrong_words
         }
     except HTTPException:
         raise

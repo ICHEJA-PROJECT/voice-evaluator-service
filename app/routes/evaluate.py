@@ -19,7 +19,8 @@ router = APIRouter()
                         "objective_sentence": "Hola mundo",
                         "transcription": "Hola mundo",
                         "distance": 0,
-                        "precision": 100.0
+                        "precision": 100.0,
+                        "wrong_words": []
                     }
                 }
             }
