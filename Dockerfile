@@ -4,14 +4,29 @@ FROM python:3.10-slim
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y ffmpeg && \
-    apt-get clean
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Create and use working directory
 WORKDIR /app
 
-# Copy requirements and app
+# Upgrade pip and install wheel for better package installation
+RUN pip install --upgrade pip wheel
+
+# Copy requirements and install dependencies with optimizations
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Install PyTorch CPU-only version first to avoid CUDA packages
+RUN pip install --no-cache-dir \
+    --timeout=300 \
+    --retries=3 \
+    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+# Install other requirements
+RUN pip install --no-cache-dir \
+    --timeout=300 \
+    --retries=3 \
+    -r requirements.txt
 
 COPY app/ ./app
 
